@@ -42,7 +42,10 @@ class BaseRuleEnricherNumerical:
 
     def _find_useful_pred_per_var(self, var):
         qq = query_select_useful_preds(self.rule, var)
-        useful_preds = self.graph.query_dataframe(qq)
+        try:
+            useful_preds = self.graph.query_dataframe(qq)
+        except Exception:
+            return set()
         return set(useful_preds.useful_preds).intersection(set(self.numerical_preds))
 
     def _compute_var_to_pred_relaxed_supp(self):
@@ -103,8 +106,11 @@ class BaseRuleEnricherNumerical:
     def query_get_df(self, var_preds_dict):
         q_out_str, dict_feature_var_pred = query_main_df(self._base_query_df, var_preds_dict)
         df = self.graph.query_dataframe(q_out_str)
-        df['label'] = np.where((df['anything'] == df[self._rep_var[1:]]), 1, 0)
-        df = df.drop(['anything'], axis=1)
+        if 'anything' in df.columns:
+            df['label'] = np.where((df['anything'] == df[self._rep_var[1:]]), 1, 0)
+            df = df.drop(['anything'], axis=1)
+        else:
+            df['label'] = 0
         df = df.drop_duplicates()
         cols = list(df.columns)
         cols.remove('label')

@@ -79,7 +79,6 @@ class RDFLibGraph(RDFGraph):
                 return str(val)
             else:
                 return val
-        self.graph.query(query)
         dict_list_q_ = [row.asdict() for row in self.graph.query(query)]
         if len(dict_list_q_)==0:
             return pd.DataFrame({'useful_preds':[]})
