@@ -32,7 +32,7 @@ Start from the run_process.py and pass arguments to enrich the rules
 
 For ex:
     
-    python src/run_process.py
+    python3 src/run_process.py
     --train_path data/datasets/sample_small/train_dl.tsv
     --numerical_path data/datasets/sample_small/numericals.tsv
     --path_result data/results/result_sample
